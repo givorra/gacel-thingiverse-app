@@ -1,4 +1,4 @@
-import {Resolver, Arg, Query} from "type-graphql";
+import {Resolver, Arg, Query, ID} from "type-graphql";
 import {ThingService} from "../../services/ThingService";
 import Thing from "../models/Thing";
 
@@ -10,7 +10,7 @@ export class ThingResolver {
     // }
 
     @Query(returns => Thing)
-    async getThingById(@Arg("id", {nullable: false}) id: number): Promise<Thing> {
+    async getThingById(@Arg("id", type => ID, {nullable: false}) id: number): Promise<Thing> {
         return ThingService.findById(id);
     };
 

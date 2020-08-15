@@ -2,7 +2,7 @@ import {Field, ID, ObjectType} from "type-graphql";
 
 @ObjectType()
 class Thing {
-    @Field(() => ID)
+    @Field(type => ID)
     public id: number = 0;
 }
 
