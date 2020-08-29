@@ -5,6 +5,7 @@ import {ThingResolver} from "./graphql/resolvers/ThingResolver";
 // import {ContainerBuilder} from "node-dependency-injection";
 import Thing from "./graphql/models/Thing";
 import {ThingService} from "./services/ThingService";
+import {AuthenticationResolver} from "./graphql/resolvers/AuthenticationResolver";
 
 async function main() {
 
@@ -15,7 +16,7 @@ async function main() {
     //     .addArgument('ThingService');
 
     const schema = await buildSchema({
-        resolvers: [ThingResolver]
+        resolvers: [ThingResolver, AuthenticationResolver]
     });
     const server = new ApolloServer({schema});
     await server.listen(4000);
