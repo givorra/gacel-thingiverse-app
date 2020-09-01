@@ -1,4 +1,6 @@
 import fetch from 'node-fetch';
+import {THINGIVERSE_OAUTH_ACCESS_TOKEN_URL, THINGIVERSE_OAUTH_AUTHORIZE_URL} from "../consts";
+import {ApolloError} from "apollo-server-errors";
 
 export class AuthenticationService {
     static async getAccessToken(code: String): Promise<String> {
@@ -7,8 +9,9 @@ export class AuthenticationService {
             `client_secret=${process.env.THINGIVERSE_CLIENT_SECRET}`,
             `code=${code}`
         ].join("&");
+        const url = `${THINGIVERSE_OAUTH_ACCESS_TOKEN_URL}?${qParams}`;
 
-        const token: String = await fetch(`${process.env.THINGIVERSE_OAUTH_ACCESS_TOKEN_URL}?${qParams}`, {
+        const token: String = await fetch(url, {
                 method: "POST"
             })
         .then(response => response.text())
@@ -19,9 +22,8 @@ export class AuthenticationService {
             // return '';
         })
         .catch(error => {
-            console.error(error);
-            // FIXME: return GraphQL ERROR
-            return '';
+            console.error(error.toString());
+            throw new ApolloError(error.toString());
         });
 
         return Promise.resolve(token);
@@ -34,6 +36,6 @@ export class AuthenticationService {
             `client_id=${process.env.THINGIVERSE_CLIENT_ID}`,
         ].join("&");
 
-        return `${process.env.THINGIVERSE_OAUTH_AUTHORIZE_URL}?${qParams}`;
+        return `${THINGIVERSE_OAUTH_AUTHORIZE_URL}?${qParams}`;
     }
 }

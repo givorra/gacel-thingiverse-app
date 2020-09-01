@@ -1,11 +1,14 @@
 import Thing from "../graphql/models/Thing";
 import fetch from 'node-fetch';
 import {ApolloError} from "apollo-server-errors";
-
+import {THINGIVERSE_API_SEARCH_THINGS_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
+// import {THINGIVERSE_API_SEARCH_THINGS_URL} from "../"
 
 export class ThingService {
+
     static async findById(id: number, token: string): Promise<Thing> {
-        const url = "https://api.thingiverse.com/things/1762299";
+        const url = `${THINGIVERSE_API_THINGS_URL}/${id}`;
+
         const thing: Thing = await fetch(url, {
             method: "GET",
             headers: ThingService.getHeaders(token)
@@ -27,8 +30,8 @@ export class ThingService {
             `page=${page}`,
             `per_page=${per_page}`,
         ].join("&");
+        const url = `${THINGIVERSE_API_SEARCH_THINGS_URL}?${qParams}`;
 
-        const url = `https://api.thingiverse.com/search/things?${qParams}`;
         const things: Thing[] = await fetch(url, {
             method: "GET",
             headers: ThingService.getHeaders(token)
