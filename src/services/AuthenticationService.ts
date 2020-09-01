@@ -1,23 +1,16 @@
 import fetch from 'node-fetch';
 
-const ThingiverseConfig = {
-    URL_ACCESS_TOKEN: "https://www.thingiverse.com/login/oauth/access_token",
-    CLIENT_ID: "ae78d6c71cf7f968065f",
-    CLIENT_SECRET: "b964b7b99c06479b475dd1654000536f"
-};
-
 export class AuthenticationService {
     static async getAccessToken(code: String): Promise<String> {
         const qParams = [
-            `client_id=${ThingiverseConfig.CLIENT_ID}`,
-            `client_secret=${ThingiverseConfig.CLIENT_SECRET}`,
+            `client_id=${process.env.THINGIVERSE_CLIENT_ID}`,
+            `client_secret=${process.env.THINGIVERSE_CLIENT_SECRET}`,
             `code=${code}`
         ].join("&");
 
-        const token: String = await fetch(`${ThingiverseConfig.URL_ACCESS_TOKEN}?${qParams}`, {
+        const token: String = await fetch(`${process.env.THINGIVERSE_OAUTH_ACCESS_TOKEN_URL}?${qParams}`, {
                 method: "POST"
-            }
-        )
+            })
         .then(response => response.text())
         .then(response => {
             const responseFields = new URLSearchParams(response);
@@ -32,5 +25,15 @@ export class AuthenticationService {
         });
 
         return Promise.resolve(token);
+    }
+
+    static getAuthenticationRedirectUrl() {
+        const qParams = [
+            `redirect_uri=${process.env.AUTHORIZATION_REDIRECT_URI}`,
+            `response_type=code`,
+            `client_id=${process.env.THINGIVERSE_CLIENT_ID}`,
+        ].join("&");
+
+        return `${process.env.THINGIVERSE_OAUTH_AUTHORIZE_URL}?${qParams}`;
     }
 }

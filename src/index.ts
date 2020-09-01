@@ -1,12 +1,10 @@
 import "reflect-metadata";
 import {ApolloServer} from "apollo-server";
-import {AuthenticationError} from "apollo-server-errors";
 import {buildSchema} from "type-graphql";
 import {ThingResolver} from "./graphql/resolvers/ThingResolver";
 // import {ContainerBuilder} from "node-dependency-injection";
-import Thing from "./graphql/models/Thing";
-import {ThingService} from "./services/ThingService";
 import {AuthenticationResolver} from "./graphql/resolvers/AuthenticationResolver";
+import {config as dotenvConfig} from "dotenv"
 
 export interface Context {
     token: string
@@ -19,6 +17,7 @@ async function main() {
     // container.register('ThingService', ThingService);
     // container.register('ThingResolver', ThingResolver)
     //     .addArgument('ThingService');
+    dotenvConfig();
 
     const schema = await buildSchema({
         resolvers: [ThingResolver, AuthenticationResolver]
