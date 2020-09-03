@@ -5,7 +5,6 @@ import {THINGIVERSE_API_SEARCH_THINGS_URL, THINGIVERSE_API_THINGS_URL} from "../
 import {checkStatus} from "../fetch-utils";
 
 export class ThingService {
-
     static async findById(id: number, token: string): Promise<Thing> {
         const url = `${THINGIVERSE_API_THINGS_URL}/${id}`;
 
