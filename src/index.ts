@@ -1,43 +1,18 @@
 import "reflect-metadata";
 import {ApolloServer} from "apollo-server";
-import {buildSchema} from "type-graphql";
-import {ThingResolver} from "./graphql/resolvers/ThingResolver";
-// import {ContainerBuilder} from "node-dependency-injection";
-import {AuthenticationResolver} from "./graphql/resolvers/AuthenticationResolver";
 import {config as dotenvConfig} from "dotenv"
-import {AuthenticationService} from "./services/AuthenticationService";
-import {AuthenticationError} from "apollo-server-errors";
-import {customAuthChecker} from "./graphql/auth-checker";
+import {schema} from "./graphql/schema";
 
 export interface Context {
     token: string
 }
 
 async function main() {
-
-    // let container = new ContainerBuilder();
-    // container.register('Thing', Thing);
-    // container.register('ThingService', ThingService);
-    // container.register('ThingResolver', ThingResolver)
-    //     .addArgument('ThingService');
     dotenvConfig();
 
-    const schema = await buildSchema({
-        resolvers: [ThingResolver, AuthenticationResolver],
-        authChecker: customAuthChecker
-    });
     const server = new ApolloServer({
-        schema,
+        schema: await schema,
         context: ({ req }) => {
-            // Note! This example uses the `req` object to access headers,
-            // but the arguments received by `context` vary by integration.
-            // This means they will vary for Express, Koa, Lambda, etc.!
-            //
-            // To find out the correct arguments for a specific integration,
-            // see the `context` option in the API reference for `apollo-server`:
-            // https://www.apollographql.com/docs/apollo-server/api/apollo-server/
-
-            // Get the user token from the headers.
             let token = req.headers.authorization || '';
             token = token.replace("Bearer ", "");
 
