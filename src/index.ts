@@ -5,6 +5,9 @@ import {ThingResolver} from "./graphql/resolvers/ThingResolver";
 // import {ContainerBuilder} from "node-dependency-injection";
 import {AuthenticationResolver} from "./graphql/resolvers/AuthenticationResolver";
 import {config as dotenvConfig} from "dotenv"
+import {AuthenticationService} from "./services/AuthenticationService";
+import {AuthenticationError} from "apollo-server-errors";
+import {customAuthChecker} from "./graphql/auth-checker";
 
 export interface Context {
     token: string
@@ -20,7 +23,8 @@ async function main() {
     dotenvConfig();
 
     const schema = await buildSchema({
-        resolvers: [ThingResolver, AuthenticationResolver]
+        resolvers: [ThingResolver, AuthenticationResolver],
+        authChecker: customAuthChecker
     });
     const server = new ApolloServer({
         schema,
@@ -36,7 +40,6 @@ async function main() {
             // Get the user token from the headers.
             let token = req.headers.authorization || '';
             token = token.replace("Bearer ", "");
-            // if (!token) throw new AuthenticationError('you must be logged in');
 
             // add the user to the context
             return { token };
