@@ -1,5 +1,5 @@
 import {Arg, Query, Resolver} from "type-graphql";
-import {AuthenticationService} from "../../services/AuthenticationService";
+import {AuthenticationService} from "../../services/authentication-service";
 
 @Resolver()
 export class AuthenticationResolver {

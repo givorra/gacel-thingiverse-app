@@ -1,4 +1,4 @@
-import Thing from "../graphql/models/Thing";
+import Thing from "../graphql/models/thing";
 import fetch from 'node-fetch';
 import {ApolloError} from "apollo-server-errors";
 import {THINGIVERSE_API_SEARCH_THINGS_URL, THINGIVERSE_API_THINGS_URL} from "../consts";

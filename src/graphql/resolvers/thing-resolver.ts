@@ -1,6 +1,6 @@
 import {Resolver, Arg, Query, ID, Ctx, Int, Authorized} from "type-graphql";
-import {ThingService} from "../../services/ThingService";
-import Thing from "../models/Thing";
+import {ThingService} from "../../services/thing-service";
+import Thing from "../models/thing";
 import {Context} from "../../index";
 
 
