@@ -42,11 +42,12 @@ export class ThingService {
             `page=${page}`,
             `per_page=${per_page}`,
         ].join("&");
-        const url = `${THINGIVERSE_API_SEARCH_URL}${searchParams.query ? "/" + searchParams.query : ""}?${qParams}`;
+        const url = `${THINGIVERSE_API_SEARCH_URL}${searchParams.query ? "/" + searchParams.query : "/things"}?${qParams}`;
 
         return fetch(url, {
             method: "GET",
-            headers: ThingService.getHeaders(token)
+            headers: ThingService.getHeaders(token),
+            timeout: 20000
         })
             .then(checkStatus)
             .then(response => response.json())
