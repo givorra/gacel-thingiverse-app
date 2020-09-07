@@ -8,4 +8,3 @@ export const THINGIVERSE_OAUTH_VALIDATE_TOKEN_URL: string = `${THINGIVERSE_OAUTH
 export const THINGIVERSE_API_URL: string = "https://api.thingiverse.com";
 export const THINGIVERSE_API_SEARCH_URL: string = `${THINGIVERSE_API_URL}/search`;
 export const THINGIVERSE_API_THINGS_URL: string = `${THINGIVERSE_API_URL}/things`;
-export const THINGIVERSE_API_SEARCH_THINGS_URL: string = `${THINGIVERSE_API_SEARCH_URL}/things`;

@@ -1,8 +1,14 @@
 import Thing from "../graphql/models/thing";
 import fetch from 'node-fetch';
 import {ApolloError} from "apollo-server-errors";
-import {THINGIVERSE_API_SEARCH_THINGS_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
+import {THINGIVERSE_API_SEARCH_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
 import {checkStatus} from "../fetch-utils";
+
+interface ThingsSearchParams {
+    sort: string
+    is_featured?: boolean
+    query?: string
+}
 
 export class ThingService {
     static async findById(id: number, token: string): Promise<Thing> {
@@ -23,13 +29,20 @@ export class ThingService {
             });
     }
 
-    static async getPopular(page: number, per_page: number, token: string) {
+    static getHeaders(token: string) {
+        return {
+            "Authorization": `Bearer ${token}`
+        };
+    }
+
+    static async search(page: number, per_page: number, token: string, searchParams: ThingsSearchParams) {
         const qParams = [
-            `sort=popular`,
+            `sort=${searchParams.sort}`,
+            // searchParams.is_featured ? `is_featured=1` : null,
             `page=${page}`,
             `per_page=${per_page}`,
         ].join("&");
-        const url = `${THINGIVERSE_API_SEARCH_THINGS_URL}?${qParams}`;
+        const url = `${THINGIVERSE_API_SEARCH_URL}${searchParams.query ? "/" + searchParams.query : ""}?${qParams}`;
 
         return fetch(url, {
             method: "GET",
@@ -48,11 +61,5 @@ export class ThingService {
                 console.log(error);
                 throw new ApolloError(error.toString());
             });
-    }
-
-    static getHeaders(token: string) {
-        return {
-            "Authorization": `Bearer ${token}`
-        };
     }
 }

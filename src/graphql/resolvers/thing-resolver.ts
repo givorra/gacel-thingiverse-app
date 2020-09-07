@@ -14,9 +14,12 @@ export class ThingResolver {
 
     @Authorized()
     @Query(returns => [Thing])
-    async popularThings(@Arg("page", type => Int!, {nullable: false}) page: number,
-                        @Arg("per_page", type => Int, {nullable: false}) per_page: number,
+    async searchThings(@Arg("page", type => Int!, {nullable: false}) page: number,
+                        @Arg("per_page", type => Int!, {nullable: false}) per_page: number,
+                        @Arg("sort", type => String!, {nullable: false}) sort: string,
+                        @Arg("query", type => String!, {nullable: true}) query: string,
+                        @Arg("is_featured", type => Boolean, {nullable: true}) is_featured: boolean,
                         @Ctx() ctx: Context): Promise<Thing[]> {
-        return ThingService.getPopular(page, per_page, ctx.token);
+        return ThingService.search(page, per_page, ctx.token, {sort, query, is_featured});
     };
 }
