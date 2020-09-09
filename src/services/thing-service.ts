@@ -1,6 +1,5 @@
 import Thing from "../graphql/models/thing";
 import fetch from 'node-fetch';
-import {ApolloError} from "apollo-server-errors";
 import {THINGIVERSE_API_SEARCH_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
 import {checkStatus} from "../fetch-utils";
 
@@ -25,7 +24,7 @@ export class ThingService {
             })
             .catch(error => {
                 console.log(error);
-                throw new ApolloError(error.toString());
+                throw new Error(error.toString());
             });
     }
 
@@ -38,7 +37,7 @@ export class ThingService {
     static async search(page: number, per_page: number, token: string, searchParams: ThingsSearchParams) {
         const qParams = [
             `sort=${searchParams.sort}`,
-            // searchParams.is_featured ? `is_featured=1` : null,
+            searchParams.is_featured ? `is_featured=1` : null,
             `page=${page}`,
             `per_page=${per_page}`,
         ].join("&");
@@ -60,7 +59,7 @@ export class ThingService {
             })
             .catch(error => {
                 console.log(error);
-                throw new ApolloError(error.toString());
+                throw new Error(error.toString());
             });
     }
 }

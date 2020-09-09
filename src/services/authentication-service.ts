@@ -4,7 +4,6 @@ import {
     THINGIVERSE_OAUTH_AUTHORIZE_URL,
     THINGIVERSE_OAUTH_VALIDATE_TOKEN_URL
 } from "../consts";
-import {ApolloError} from "apollo-server-errors";
 import {checkStatus} from "../fetch-utils";
 
 export class AuthenticationService {
@@ -29,7 +28,7 @@ export class AuthenticationService {
             })
             .catch(error => {
                 console.error(error.toString());
-                throw new ApolloError(error.toString());
+                throw new Error(error.toString());
             });
     }
 
@@ -58,7 +57,7 @@ export class AuthenticationService {
             })
             .catch(error => {
                 console.error(error.toString());
-                throw new ApolloError(error.toString());
+                throw new Error(error.toString());
             });
     }
 }
