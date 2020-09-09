@@ -52,9 +52,9 @@ export class AuthenticationService {
             .then(response => response.json())
             .then(response => {
                 if (response.error)
-                    throw new ApolloError(response.error);
-
-                return response.audience === process.env.THINGIVERSE_CLIENT_ID;
+                    return false;
+                else
+                    return response.audience === process.env.THINGIVERSE_CLIENT_ID;
             })
             .catch(error => {
                 console.error(error.toString());
