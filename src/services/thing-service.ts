@@ -2,6 +2,7 @@ import Thing from "../graphql/models/thing";
 import fetch from 'node-fetch';
 import {THINGIVERSE_API_SEARCH_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
 import {checkStatus} from "../fetch-utils";
+import SearchThingResponse from "../graphql/models/search-thing-response";
 
 interface ThingsSearchParams {
     sort: string
@@ -34,7 +35,7 @@ export class ThingService {
         };
     }
 
-    static async search(page: number, per_page: number, token: string, searchParams: ThingsSearchParams) {
+    static async search(page: number, per_page: number, token: string, searchParams: ThingsSearchParams): Promise<SearchThingResponse> {
         const qParams = [
             `sort=${searchParams.sort}`,
             searchParams.is_featured ? `is_featured=1` : null,
@@ -51,11 +52,14 @@ export class ThingService {
             .then(checkStatus)
             .then(response => response.json())
             .then(response => {
-                let responseThings: Thing[] = [];
-                for (const thing of response.hits) {
-                    responseThings.push(new Thing(thing.id, thing.name, thing.public_url, thing.like_count, thing.is_liked, thing.comment_count, thing.preview_image))
+                if (response && response.hits) {
+                    return new SearchThingResponse(
+                        response.total,
+                        response.hits.map((thing: any) => new Thing(thing.id, thing.name, thing.public_url, thing.like_count, thing.is_liked, thing.comment_count, thing.preview_image))
+                    );
+                } else {
+                    return new SearchThingResponse(0, []);
                 }
-                return responseThings;
             })
             .catch(error => {
                 console.log(error);
