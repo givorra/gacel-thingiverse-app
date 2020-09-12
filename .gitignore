@@ -3,5 +3,6 @@
 
 # Node files
 node_modules
+dist
 
 .env

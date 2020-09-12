@@ -8,6 +8,8 @@ export interface Context {
     token: string
 }
 
+const port = process.env.PORT || 4000;
+
 async function main() {
     dotenvConfig();
     initCache();
@@ -21,8 +23,8 @@ async function main() {
             // add the user to the context
             return { token };
         }});
-    await server.listen(process.env.PORT || 4000);
-    console.log("Server has started!");
+    await server.listen(port);
+    console.log("Server has started on port " + port);
 }
 
 main();
