@@ -1,4 +1,4 @@
-import {Arg, Authorized, Ctx, ID, Int, Query, Resolver} from "type-graphql";
+import {Arg, Authorized, Ctx, ID, Int, Mutation, Query, Resolver} from "type-graphql";
 import {ThingService} from "../../services/thing-service";
 import Thing from "../models/thing";
 import {Context} from "../../index";
@@ -22,5 +22,13 @@ export class ThingResolver {
                         @Arg("is_featured", type => Boolean, {nullable: true}) is_featured: boolean,
                         @Ctx() ctx: Context): Promise<SearchThingResponse> {
         return ThingService.search(page, per_page, ctx.token, {sort, query, is_featured});
+    };
+
+    @Authorized()
+    @Mutation(returns => Boolean)
+    async setThingLike(@Arg("like", type => Boolean, {nullable: false}) like: boolean,
+                       @Arg("thing_id", type => ID, {nullable: false}) thing_id: number,
+                       @Ctx() ctx: Context): Promise<Boolean> {
+        return ThingService.setThingLike(like, thing_id, ctx.token);
     };
 }

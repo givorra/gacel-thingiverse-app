@@ -1,6 +1,6 @@
 import Thing from "../graphql/models/thing";
 import fetch from 'node-fetch';
-import {THINGIVERSE_API_SEARCH_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
+import {THINGIVERSE_API_SEARCH_URL, THINGIVERSE_API_THING_LIKE_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
 import {checkStatus} from "../fetch-utils";
 import SearchThingResponse from "../graphql/models/search-thing-response";
 
@@ -60,6 +60,25 @@ export class ThingService {
                 } else {
                     return new SearchThingResponse(0, []);
                 }
+            })
+            .catch(error => {
+                console.log(error);
+                throw new Error(error.toString());
+            });
+    }
+
+    static setThingLike(like: boolean, thing_id: number, token: string) {
+        const url = THINGIVERSE_API_THING_LIKE_URL.replace(":id", thing_id.toString());
+
+        return fetch(url, {
+            method: like ? "POST" : "DELETE",
+            headers: ThingService.getHeaders(token),
+            timeout: 20000
+        })
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(response => {
+                return response.ok === "ok";
             })
             .catch(error => {
                 console.log(error);
