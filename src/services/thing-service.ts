@@ -1,6 +1,11 @@
 import Thing from "../graphql/models/thing";
 import fetch from 'node-fetch';
-import {THINGIVERSE_API_SEARCH_URL, THINGIVERSE_API_THING_LIKE_URL, THINGIVERSE_API_THINGS_URL} from "../consts";
+import {
+    THINGIVERSE_API_SEARCH_URL,
+    THINGIVERSE_API_THING_LIKE_URL,
+    THINGIVERSE_API_THING_WATCH_URL,
+    THINGIVERSE_API_THINGS_URL
+} from "../consts";
 import {checkStatus} from "../fetch-utils";
 import SearchThingResponse from "../graphql/models/search-thing-response";
 
@@ -21,7 +26,8 @@ export class ThingService {
             .then(checkStatus)
             .then(response => response.json())
             .then(response => {
-                return new Thing(response.id, response.name, response.public_url, response.like_count, response.is_liked, response.comment_count, response.default_image.url);
+                return new Thing(response.id, response.name, response.public_url, response.like_count, response.is_liked,
+                    response.comment_count, response.default_image.url, response.description_html, response.is_watched);
             })
             .catch(error => {
                 console.log(error);
@@ -72,6 +78,25 @@ export class ThingService {
 
         return fetch(url, {
             method: like ? "POST" : "DELETE",
+            headers: ThingService.getHeaders(token),
+            timeout: 20000
+        })
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(response => {
+                return response.ok === "ok";
+            })
+            .catch(error => {
+                console.log(error);
+                throw new Error(error.toString());
+            });
+    }
+
+    static setThingWatch(watch: boolean, thing_id: number, token: string) {
+        const url = THINGIVERSE_API_THING_WATCH_URL.replace(":id", thing_id.toString());
+
+        return fetch(url, {
+            method: "POST",
             headers: ThingService.getHeaders(token),
             timeout: 20000
         })

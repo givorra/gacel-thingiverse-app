@@ -9,3 +9,4 @@ export const THINGIVERSE_API_URL: string = "https://api.thingiverse.com";
 export const THINGIVERSE_API_SEARCH_URL: string = `${THINGIVERSE_API_URL}/search`;
 export const THINGIVERSE_API_THINGS_URL: string = `${THINGIVERSE_API_URL}/things`;
 export const THINGIVERSE_API_THING_LIKE_URL: string = `${THINGIVERSE_API_THINGS_URL}/:id/likes`;
+export const THINGIVERSE_API_THING_WATCH_URL: string = `${THINGIVERSE_API_THINGS_URL}/:id/toggle-watch`;

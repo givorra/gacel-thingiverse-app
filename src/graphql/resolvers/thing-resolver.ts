@@ -26,9 +26,17 @@ export class ThingResolver {
 
     @Authorized()
     @Mutation(returns => Boolean)
-    async setThingLike(@Arg("like", type => Boolean, {nullable: false}) like: boolean,
-                       @Arg("thing_id", type => ID, {nullable: false}) thing_id: number,
+    async setThingLike(@Arg("like", type => Boolean!, {nullable: false}) like: boolean,
+                       @Arg("thing_id", type => ID!, {nullable: false}) thing_id: number,
                        @Ctx() ctx: Context): Promise<Boolean> {
         return ThingService.setThingLike(like, thing_id, ctx.token);
+    };
+
+    @Authorized()
+    @Mutation(returns => Boolean)
+    async setThingWatch(@Arg("watch", type => Boolean!, {nullable: false}) watch: boolean,
+                       @Arg("thing_id", type => ID!, {nullable: false}) thing_id: number,
+                       @Ctx() ctx: Context): Promise<Boolean> {
+        return ThingService.setThingWatch(watch, thing_id, ctx.token);
     };
 }
