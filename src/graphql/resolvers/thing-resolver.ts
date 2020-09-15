@@ -1,16 +1,15 @@
 import {Arg, Authorized, Ctx, ID, Int, Mutation, Query, Resolver} from "type-graphql";
-import {ThingService} from "../../services/thing-service";
+import {findById, search, setThingLike, setThingWatch} from "../../services/thing-service";
 import Thing from "../models/thing";
 import {Context} from "../../index";
 import SearchThingResponse from "../models/search-thing-response";
-
 
 @Resolver()
 export class ThingResolver {
     @Authorized()
     @Query(returns => Thing)
     async getThingById(@Arg("id", type => ID, {nullable: false}) id: number, @Ctx() ctx: Context): Promise<Thing> {
-        return ThingService.findById(id, ctx.token);
+        return findById(id, ctx.token);
     };
 
     @Authorized()
@@ -21,7 +20,7 @@ export class ThingResolver {
                         @Arg("query", type => String, {nullable: true}) query: string,
                         @Arg("is_featured", type => Boolean, {nullable: true}) is_featured: boolean,
                         @Ctx() ctx: Context): Promise<SearchThingResponse> {
-        return ThingService.search(page, per_page, ctx.token, {sort, query, is_featured});
+        return search(page, per_page, ctx.token, {sort, query, is_featured});
     };
 
     @Authorized()
@@ -29,7 +28,7 @@ export class ThingResolver {
     async setThingLike(@Arg("like", type => Boolean!, {nullable: false}) like: boolean,
                        @Arg("thing_id", type => ID!, {nullable: false}) thing_id: number,
                        @Ctx() ctx: Context): Promise<Boolean> {
-        return ThingService.setThingLike(like, thing_id, ctx.token);
+        return setThingLike(like, thing_id, ctx.token);
     };
 
     @Authorized()
@@ -37,6 +36,6 @@ export class ThingResolver {
     async setThingWatch(@Arg("watch", type => Boolean!, {nullable: false}) watch: boolean,
                        @Arg("thing_id", type => ID!, {nullable: false}) thing_id: number,
                        @Ctx() ctx: Context): Promise<Boolean> {
-        return ThingService.setThingWatch(watch, thing_id, ctx.token);
+        return setThingWatch(watch, thing_id, ctx.token);
     };
 }
