@@ -21,7 +21,6 @@ export function getAccessToken(code: String): Promise<String> {
         .then(response => response.text())
         .then(response => {
             const responseFields = new URLSearchParams(response);
-            console.log(response);
             return (responseFields && responseFields.get("access_token")) ? String(responseFields.get("access_token")) : '';
             // return '';
         })
@@ -51,8 +50,7 @@ export function validateToken(token: string): Promise<boolean> {
         .then(response => {
             if (response.error) {
                 return false;
-            }
-            else {
+            } else {
                 return response.audience === process.env.THINGIVERSE_CLIENT_ID;
             }
         })

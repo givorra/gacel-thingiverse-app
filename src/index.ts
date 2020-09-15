@@ -16,13 +16,14 @@ async function main() {
 
     const server = new ApolloServer({
         schema: await schema,
-        context: ({ req }) => {
+        context: ({req}) => {
             let token = req.headers.authorization || '';
             token = token.replace("Bearer ", "");
 
             // add the user to the context
-            return { token };
-        }});
+            return {token};
+        }
+    });
     await server.listen(port);
     console.log("Server has started on port " + port);
 }

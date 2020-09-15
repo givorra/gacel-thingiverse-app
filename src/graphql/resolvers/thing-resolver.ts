@@ -15,11 +15,11 @@ export class ThingResolver {
     @Authorized()
     @Query(returns => SearchThingResponse)
     async searchThings(@Arg("page", type => Int!, {nullable: false}) page: number,
-                        @Arg("per_page", type => Int!, {nullable: false}) per_page: number,
-                        @Arg("sort", type => String!, {nullable: false}) sort: string,
-                        @Arg("query", type => String, {nullable: true}) query: string,
-                        @Arg("is_featured", type => Boolean, {nullable: true}) is_featured: boolean,
-                        @Ctx() ctx: Context): Promise<SearchThingResponse> {
+                       @Arg("per_page", type => Int!, {nullable: false}) per_page: number,
+                       @Arg("sort", type => String!, {nullable: false}) sort: string,
+                       @Arg("query", type => String, {nullable: true}) query: string,
+                       @Arg("is_featured", type => Boolean, {nullable: true}) is_featured: boolean,
+                       @Ctx() ctx: Context): Promise<SearchThingResponse> {
         return search(page, per_page, ctx.token, {sort, query, is_featured});
     };
 
@@ -34,8 +34,8 @@ export class ThingResolver {
     @Authorized()
     @Mutation(returns => Boolean)
     async setThingWatch(@Arg("watch", type => Boolean!, {nullable: false}) watch: boolean,
-                       @Arg("thing_id", type => ID!, {nullable: false}) thing_id: number,
-                       @Ctx() ctx: Context): Promise<Boolean> {
+                        @Arg("thing_id", type => ID!, {nullable: false}) thing_id: number,
+                        @Ctx() ctx: Context): Promise<Boolean> {
         return setThingWatch(watch, thing_id, ctx.token);
     };
 }
